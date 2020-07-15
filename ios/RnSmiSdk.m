@@ -16,43 +16,46 @@ RCT_EXPORT_METHOD(sampleMethod:(NSString *)stringArgument numberParameter:(nonnu
     return dispatch_get_main_queue();
 }
 
-// RCT_EXPORT_METHOD(getSDURL:(NSString *)url:(RCTResponseSenderBlock)callback) {
-//     NSString* apiKey = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"DATAMI_API_KEY"];
-//     if([apiKey length]) {
-//         SmiResult *sr = [SmiSdk getSDAuth:apiKey url:url userId:nil];
-//         NSLog(@"sr.url:%@ sr.state:%ld",sr.url,(long)sr.sdState);
-//         callback(@[sr.url, [NSNumber numberWithInt:sr.sdState], [NSNumber numberWithInt:sr.sdReason]]);
-//     }
-//     else{
-//         callback(@[[NSNull null], [NSNull null], [NSNull null]]);
-//     }
-// }
+RCT_EXPORT_METHOD(getSDURL:(NSString *)url:(RCTResponseSenderBlock)callback) {
+    NSString* apiKey = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"DATAMI_API_KEY"];
+    if([apiKey length]) {
+        SmiResult *sr = [SmiSdk getSDAuth:apiKey url:url userId:nil];
+        NSLog(@"sr.url:%@ sr.state:%ld",sr.url,(long)sr.sdState);
+        callback(@[sr.url, [NSNumber numberWithInt:sr.sdState], [NSNumber numberWithInt:sr.sdReason]]);
+    }
+    else{
+        callback(@[[NSNull null], [NSNull null], [NSNull null]]);
+    }
+}
 
-// RCT_EXPORT_METHOD(getAnalytics:(RCTResponseSenderBlock)callback) {
-//     SmiAnalytics *analytics = [SmiSdk getAnalytics];
-//     NSTimeInterval wifiTm = analytics.fgWifiSessionTime;
-//     NSTimeInterval cellTm = analytics.fgCellularSessionTime;
-//     int64_t sdUsage = analytics.sdDataUsage;
-//     NSLog(@"Analytics:%f %f %lld",wifiTm,cellTm,sdUsage);
-//     callback(@[[NSNumber numberWithDouble:wifiTm],[NSNumber numberWithDouble:cellTm],[NSNumber numberWithLongLong:sdUsage]]);
+RCT_EXPORT_METHOD(getAnalytics:(RCTResponseSenderBlock)callback) {
+    SmiAnalytics *analytics = [SmiSdk getAnalytics];
+    NSTimeInterval wifiTm = analytics.fgWifiSessionTime;
+    NSTimeInterval cellTm = analytics.fgCellularSessionTime;
+    int64_t sdUsage = analytics.sdDataUsage;
+    NSLog(@"Analytics:%f %f %lld",wifiTm,cellTm,sdUsage);
+    callback(@[[NSNumber numberWithDouble:wifiTm],[NSNumber numberWithDouble:cellTm],[NSNumber numberWithLongLong:sdUsage]]);
     
-// }
-
-RCT_EXPORT_METHOD(startSponsorVpn) {
-    [SmiSdk startSponsorVpn];
-    NSLog(@"startSponsorVpn()");
 }
 
-RCT_EXPORT_METHOD(stopSponsorVpn) {
-    [SmiSdk stopSponsorVpn];
-    NSLog(@"stopSponsorVpn()");
+RCT_EXPORT_METHOD(startSponsoredData) {
+    [SmiSdk startSponsorData];
 }
 
-RCT_EXPORT_METHOD(getVpnSdState:(RCTResponseSenderBlock)callback) {
-    SdState sdState = [SmiSdk getVpnSdState];
-    NSLog(@"getVpnSdState:%s",sdState);
-    callback(@[NSString sdState]);
+RCT_EXPORT_METHOD(stopSponsoredData) {
+    [SmiSdk stopSponsorData];
 }
 
+RCT_EXPORT_METHOD(registerAppConfiguration:(NSURLSessionConfiguration*) aConfig) {
+    [SmiSdk registerAppConfiguration:aConfig];
+}
+
+RCT_EXPORT_METHOD(updateUserId:(NSString*)userId) {
+    [SmiSdk updateUserId:userId];
+}
+
+RCT_EXPORT_METHOD(updateTags:(NSArray *)tags) {
+    [SmiSdk updateTag:tags];
+}
 
 @end
