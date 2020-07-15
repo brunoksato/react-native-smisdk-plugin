@@ -24,6 +24,8 @@ Pod::Spec.new do |s|
   s.requires_arc = true
 
   s.dependency "React"
+  s.xcconfig = {'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) VPN_API=1' }
+
   # ...
   # s.dependency "..."
 end
