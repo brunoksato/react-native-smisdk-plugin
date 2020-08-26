@@ -65,11 +65,23 @@ function findStringsXml(folder) {
    function updateConfigurationFile(confFilePath){
       console.log('updateConfigurationFile()');
       const smisdkApikey = '\n<string name="smisdk_apikey"></string>';
+      const smisdkShowMessaging = '\n<bool name="smisdk_show_messaging">true</bool>';
+      const smisdkStartVpn = '\n<bool name="smisdk_start_vpn">true</bool>';
+      const smisdkControlledVpn = '\n<bool name="smisdk_controlled_vpn">false</bool>';
      
       var stringsXmlDoc= fs.readFileSync(confFilePath, 'utf8');
       var resourcesEndIndex = stringsXmlDoc.search("</resources>")
       if(stringsXmlDoc.search('smisdk_apikey')<0){
          stringsXmlDoc = insert(stringsXmlDoc, resourcesEndIndex-1, smisdkApikey);
+      }
+      if (stringsXmlDoc.search('smisdk_show_messaging') < 0) {
+        stringsXmlDoc = insert(stringsXmlDoc, resourcesEndIndex - 1, smisdkShowMessaging);
+      }
+      if (stringsXmlDoc.search('smisdk_start_vpn') < 0) {
+        stringsXmlDoc = insert(stringsXmlDoc, resourcesEndIndex - 1, smisdkStartVpn);
+      }
+      if (stringsXmlDoc.search('smisdk_controlled_vpn') < 0) {
+        stringsXmlDoc = insert(stringsXmlDoc, resourcesEndIndex - 1, smisdkControlledVpn);
       }
       fs.writeFileSync(confFilePath, stringsXmlDoc, 'utf8');
    }
@@ -286,9 +298,11 @@ function updateManifestFile(manifestPath, applicationClassName) {
 
    		    const packageImport = 'import com.datami.smi.SdStateChangeListener; \nimport com.datami.smi.SmiResult; \nimport com.datami.smi.SmiVpnSdk; \nimport com.datami.smi.SmiSdk; \nimport com.datami.smisdk_plugin.SmiSdkReactModule; \nimport com.datami.smisdk_plugin.SmiSdkReactPackage; \nimport com.datami.smi.internal.MessagingType; \n';
 
-   		 	  const initSponsoredDataAPI = '\nSmiVpnSdk.initSponsoredData(getResources().getString(R.string.smisdk_apikey), \nthis, R.mipmap.ic_launcher,\nMessagingType.BOTH, true);';
+   		 	  const initSponsoredDataAPI = '\nSmiVpnSdk.initSponsoredData(getResources().getString(R.string.smisdk_apikey), \nthis, R.mipmap.ic_launcher, dmiMessaging, dmiStartVpn, 0, dmiControlledVpn);';
 
-          const onCreateMethod = '\n @Override \n public void onCreate() { \n  super.onCreate();' + initSponsoredDataAPI + ' \n}';
+          const stringParse = '\nboolean dmiUserMessaging = getResources().getBoolean(R.bool.smisdk_show_messaging);  \nboolean dmiStartVpn = getResources().getBoolean(R.bool.smisdk_start_vpn);  \nboolean dmiControlledVpn = getResources().getBoolean(R.bool.smisdk_controlled_vpn);  \nMessagingType dmiMessaging = MessagingType.NONE;   \nif(dmiUserMessaging){ \n   dmiMessaging = MessagingType.BOTH; \n }\n';
+
+          const onCreateMethod = '\n @Override \n public void onCreate() { \n  super.onCreate();' + stringParse + initSponsoredDataAPI + ' \n}';
 
           const stateChangeListnerStr = ' SdStateChangeListener, ';
 
@@ -317,7 +331,7 @@ function updateManifestFile(manifestPath, applicationClassName) {
             var intSuperIndex = appfileNew.search("super.onCreate()");
             console.log('intSuperIndex: ' + intSuperIndex);
             if (intSuperIndex > 0) {
-              appfileNew = insert(appfileNew, intSuperIndex + 17, initSponsoredDataAPI);
+              appfileNew = insert(appfileNew, intSuperIndex + 17, stringParse + initSponsoredDataAPI);
             } else {
               // add onCreate method with initSponsoredData API
               var n = appfileNew.lastIndexOf("}");
@@ -359,7 +373,7 @@ function updateManifestFile(manifestPath, applicationClassName) {
             var intSuperIndex = appfileNew.search("super.onCreate()");
             console.log('intSuperIndex: ' + intSuperIndex);
             if (intSuperIndex > 0) {
-              appfileNew = insert(appfileNew, intSuperIndex + 17, initSponsoredDataAPI);
+              appfileNew = insert(appfileNew, intSuperIndex + 17, stringParse + initSponsoredDataAPI);
             } else {
               // add onCreate method with initSponsoredData API
               var n = appfileNew.lastIndexOf("}");
