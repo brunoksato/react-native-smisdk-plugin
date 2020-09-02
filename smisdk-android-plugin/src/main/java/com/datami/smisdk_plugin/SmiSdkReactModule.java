@@ -114,9 +114,11 @@ public class SmiSdkReactModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public boolean isVpnPermissionAccepted(){
+    public void isVpnPermissionAccepted(Callback booleanCallback){
         boolean isAcc = SmiVpnSdk.isVpnPermissionAccepted();
         Log.d(TAG, "isVpnPermissionAccepted: " + isAcc);
-        return isAcc;
+        if(booleanCallback!=null){
+            booleanCallback.invoke(isAcc);
+        }
     }
 }
