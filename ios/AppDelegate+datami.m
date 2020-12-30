@@ -28,7 +28,8 @@
     }
     
     if([apiKey length]) {
-        [SmiSdk initSponsoredVPN:apiKey showSDMessage:bMessaging ctrlVpnPerm:NO];
+        [SmiSdk initSponsoredVPN:apiKey showSDMessage:bMessaging startVPN:YES ctrlVpnPerm:NO];
+
         NSLog(@"Datami sdk initialized with :%@",apiKey );
     }
     else{

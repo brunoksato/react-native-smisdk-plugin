@@ -42,7 +42,8 @@ RCT_EXPORT_MODULE()
 -(void)startObserving {
     hasListeners = YES;
     if(sr != nil) {
-        [self sendEventWithName:@"DATAMI_EVENT" body:@{@"state": [NSNumber numberWithInteger:sr.sdState]}];
+      NSString *sdStateString = [self getSdStateString:sr.sdState];
+      [self sendEventWithName:@"DATAMI_EVENT" body:@{@"state": sdStateString}];
     }
 }
 
@@ -79,7 +80,7 @@ RCT_EXPORT_MODULE()
         NSString *sdStateString = [self getSdStateString:sr.sdState];
         NSString *sdReasonString = [SmiSdk getReasonString:sr.sdReason];
         // NSLog(@"receivedStateChage, sdState: %@ sr.clientIp:%@ sr.carrierName:%@ sdReason: %ld ", [self getSdStateString:sr.sdState], sr.clientIp, sr.carrierName, [SmiSdk getReasonString:sr.sdReason]);
-        NSLog(@"receivedStateChage, sdState: %@ sr.clientIp:%@ sr.carrierName:%@ sdReason: %ld ", sdStateString, sr.clientIp, sr.carrierName, sdReasonString);
+        NSLog(@"receivedStateChage, sdState: %@ sr.clientIp:%@ sr.carrierName:%@ sdReason: %@ ", sdStateString, sr.clientIp, sr.carrierName, sdReasonString);
 
         if(hasListeners) {
           if(sr.clientIp != nil){
