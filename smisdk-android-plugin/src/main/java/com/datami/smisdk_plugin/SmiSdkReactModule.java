@@ -122,4 +122,21 @@ public class SmiSdkReactModule extends ReactContextBaseJavaModule {
             booleanCallback.invoke(isAcc);
         }
     }
+
+    @ReactMethod
+    public void updateUserTag(ReadableArray userTags)
+    {
+        List<String> userTagsJava = null;
+        if( (userTags!=null) && (userTags.size()>0)) {
+            userTagsJava = new ArrayList<String>();
+            Log.d(TAG, "userTags length: "+userTags.size());
+            for(int i=0; i<userTags.size(); i++)
+            {
+                userTagsJava.add(userTags.getString(i));
+            }
+            SmiVpnSdk.updateUserTag(userTagsJava);
+        }else {
+            Log.d(TAG, "userTags not available.");
+        }
+    }
 }
