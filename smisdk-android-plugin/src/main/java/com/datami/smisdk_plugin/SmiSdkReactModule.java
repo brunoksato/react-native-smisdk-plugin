@@ -1,6 +1,7 @@
 package com.datami.smisdk_plugin;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.datami.smi.Analytics;
@@ -137,6 +138,17 @@ public class SmiSdkReactModule extends ReactContextBaseJavaModule {
             SmiVpnSdk.updateUserTag(userTagsJava);
         }else {
             Log.d(TAG, "userTags not available.");
+        }
+    }
+
+    @ReactMethod
+    public void updateUserId(String userId)
+    {
+        if(!TextUtils.isEmpty(userId)) {
+            Log.d(TAG, "updateUserId: " + userId);
+            SmiVpnSdk.updateUserId(userId);
+        }else {
+            Log.d(TAG, "userId not available.");
         }
     }
 }
