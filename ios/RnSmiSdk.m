@@ -19,5 +19,13 @@ RCT_EXPORT_METHOD(stopSponsorVpn) {
     [SmiSdk stopSponsorVpn];
 }
 
+RCT_EXPORT_METHOD(updateUserId:(NSString*)userId) {
+    [SmiSdk updateUserId:userId];
+}
+
+RCT_EXPORT_METHOD(updateTags:(NSArray *)tags) {
+    [SmiSdk updateTag:tags];
+}
+
 
 @end
