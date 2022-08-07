@@ -13,6 +13,6 @@ android {
 }
 
 dependencies {
-    compile 'com.facebook.react:react-native:+'
-    compile 'com.datami:vpnsdk:+'
+    implementation "com.facebook.react:react-native:+"
+    implementation "com.datami:vpnsdk:+"
 }
